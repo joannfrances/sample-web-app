@@ -40,8 +40,9 @@
   flex: 1;
 }
 
-.inputContainer input {
+.inputContainer textarea {
   width: 100%;
+  max-width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -155,6 +156,11 @@ a.secondary {
     align-items: center;
     justify-content: center;
   }
+}
+
+.whitespace-pre-wrap {
+  white-space: pre-wrap;
+  margin-bottom: 16px;
 }
 
 @media (prefers-color-scheme: dark) {
