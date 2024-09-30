@@ -4,22 +4,26 @@ import Image from "next/image";
 import styles from "./page.module.css";
 import { useRef } from "react";
 import { useChat } from "ai/react";
+import Loader from "./components/Loader";
+import toast from "react-hot-toast";
 
 export default function Home() {
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  const { messages, input, handleInputChange, handleSubmit, data } = useChat({
-    onResponse: (response) => {
-      if (response.status === 429) {
-        window.alert("You have reached your request limit for the day.");
-        return;
-      }
-    },
-    onError: (error) => {
-      console.error("Something went wrong", error.toString());
-    },
-  });
+  const { messages, input, handleInputChange, handleSubmit, data, isLoading } =
+    useChat({
+      onResponse: (response) => {
+        if (response.status === 429) {
+          window.alert("You have reached your request limit for the day.");
+          return;
+        }
+      },
+      onError: (error) => {
+        console.error("Something went wrong", error);
+        toast.error(error.message);
+      },
+    });
 
   return (
     <div className={styles.page}>
@@ -27,13 +31,22 @@ export default function Home() {
         <div className="text">Welcome! Ask me anything!</div>
         <div className={styles.chatContainer}>
           <div className="flex flex-col w-full max-w-md py-24 mx-auto stretch">
-            {data && data.length ? <pre>{JSON.stringify(data, null, 2)}</pre> : ""}
+            {data && data.length ? (
+              <pre>{JSON.stringify(data, null, 2)}</pre>
+            ) : (
+              ""
+            )}
             {messages.map((m) => (
               <div key={m.id} className={styles["whitespace-pre-wrap"]}>
                 {m.role === "user" ? "You: " : "Chatty: "}
                 {m.content}
               </div>
             ))}
+            {isLoading && (
+              <div className={styles.loaderContainer}>
+                <Loader />
+              </div>
+            )}
           </div>
         </div>
         <div className={styles.inputContainer}>

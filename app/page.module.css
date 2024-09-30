@@ -163,6 +163,11 @@ a.secondary {
   margin-bottom: 16px;
 }
 
+.loaderContainer {
+  text-align: center;
+  margin: 50px 0;
+}
+
 @media (prefers-color-scheme: dark) {
   .logo {
     filter: invert();
